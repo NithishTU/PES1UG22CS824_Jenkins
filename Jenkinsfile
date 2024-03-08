@@ -1,29 +1,34 @@
-
 pipeline {
     agent any
 
-    stages{
-      stage('Build'){
-        steps{
-          build 'PES1UG22CS824-1'
-          sh 'g++ main.cpp -o output'
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/gkalwaysno1/PES1UG21CS199_Jenkins.git' 
+            }
         }
-      }
+        stage('Build') {
+            steps {
+                build 'PES1UG21CS199-1'
+                sh 'g++ working.cpp -o output'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh './output'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'deploy'
+            }
+        }
+    }
 
-      stage('Test'){
-        steps{
-          sh './output'
+    post {
+        failure {
+            echo 'Pipeline failed!'
         }
-      }
-      stage('Deploy'){
-        steps{
-          echo 'deploy'
-        }
-      }
     }
-  post{
-    failure{
-      error 'Pipeline failed'
-    }
-  }
 }
